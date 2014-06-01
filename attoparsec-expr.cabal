@@ -16,7 +16,7 @@ Library
 
   Build-Depends:
       base       == 4.*
-    , attoparsec >= 0.10 && < 0.12
+    , attoparsec >= 0.10 && < 0.13
 
   Exposed-modules:  Data.Attoparsec.Expr
 
