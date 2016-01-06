@@ -3,15 +3,15 @@
 -- Module      :  Text.Parsec.Expr
 -- Copyright   :  (c) Daan Leijen 1999-2001, (c) Paolo Martini 2007
 -- License     :  BSD-style (see the LICENSE file)
--- 
+--
 -- Author      :  derek.a.elkins@gmail.com
 -- Ported by   :  Sebastiaan Visser <haskell@fvisser.nl>
 -- Stability   :  provisional
 -- Portability :  non-portable
--- 
+--
 -- A helper module to parse \"expressions\".
 -- Builds a parser given a table of operators and associativities.
--- 
+--
 -----------------------------------------------------------------------------
 
 module Data.Attoparsec.Expr
@@ -20,7 +20,7 @@ module Data.Attoparsec.Expr
     ) where
 
 import Control.Applicative
-import Data.Monoid
+import qualified Data.Monoid as M
 import Data.Attoparsec.Combinator
 import Data.Attoparsec.Types
 
@@ -71,7 +71,7 @@ type OperatorTable t a = [[Operator t a]]
 -- >  expr    = buildExpressionParser table term
 -- >          <?> "expression"
 -- >
--- >  term    =  parens expr 
+-- >  term    =  parens expr
 -- >          <|> natural
 -- >          <?> "simple expression"
 -- >
@@ -80,12 +80,12 @@ type OperatorTable t a = [[Operator t a]]
 -- >            , [binary "*" (*) AssocLeft, binary "/" (div) AssocLeft ]
 -- >            , [binary "+" (+) AssocLeft, binary "-" (-)   AssocLeft ]
 -- >            ]
--- >          
+-- >
 -- >  binary  name fun assoc = Infix (do{ reservedOp name; return fun }) assoc
 -- >  prefix  name fun       = Prefix (do{ reservedOp name; return fun })
 -- >  postfix name fun       = Postfix (do{ reservedOp name; return fun })
 
-buildExpressionParser :: Monoid t => [[Operator t b]] -> Parser t b -> Parser t b
+buildExpressionParser :: M.Monoid t => [[Operator t b]] -> Parser t b -> Parser t b
 buildExpressionParser operators simpleExpr
     = foldl makeParser simpleExpr operators
     where
